@@ -30,10 +30,10 @@ export default async function handler(req, res) {
             return res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
         }
 
-        // Crear un token JWT
-        const token = jwt.sign({ id: user.id }, 'your_jwt_secret', { expiresIn: '1h' });
+        // Crear un token JWT incluyendo el rol del usuario
+        const token = jwt.sign({ id: user.id, role: user.role }, 'your_jwt_secret', { expiresIn: '1h' });
 
-        return res.status(200).json({ token });
+        return res.status(200).json({ token, role: user.role });
     } else {
         res.status(405).json({ message: 'Método no permitido' });
     }

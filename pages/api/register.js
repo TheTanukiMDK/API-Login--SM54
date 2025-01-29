@@ -25,8 +25,7 @@ export default async function handler(req, res) {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insertar el nuevo usuario en la base de datos
-        await pool.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword]);
-
+        await pool.query('INSERT INTO users (email, password, role) VALUES (?, ?, ?)', [email, hashedPassword, 'user']);
         return res.status(201).json({ message: 'Usuario registrado con éxito' });
     } else {
         res.status(405).json({ message: 'Método no permitido' });
