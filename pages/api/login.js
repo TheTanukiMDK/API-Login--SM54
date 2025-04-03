@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 export default async function handler(req, res) {
     // Configurar encabezados de CORS
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -33,7 +33,13 @@ export default async function handler(req, res) {
         // Crear un token JWT
         const token = jwt.sign({ id: user.id }, 'your_jwt_secret', { expiresIn: '1h' });
 
-        return res.status(200).json({ token });
+        // Excluir la contraseña antes de devolver la información del usuario
+        const { password: _, ...userWithoutPassword } = user;
+
+        return res.status(200).json({ 
+            token, 
+            user: userWithoutPassword 
+        });
     } else {
         res.status(405).json({ message: 'Método no permitido' });
     }
